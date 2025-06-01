@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Encuestas Universitarias</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="main-container">
+    <!-- Pantalla de inicio de sesión -->
+     <!-- Logo -->
+      <div class="logo-container">
+        <img src="logo.png" alt="Logo de la Universidad" class="logo-img" />
+      </div>
+
+    <div id="login-screen" class="screen">
+      <h2>Iniciar Sesión</h2>
+      <input type="text" id="login-username" placeholder="Usuario" />
+      <input type="password" id="login-password" placeholder="Contraseña" />
+      <button onclick="login()">Entrar</button>
+      <p>¿No tienes cuenta? <a href="#" onclick="showScreen('register-screen')">Regístrate</a></p>
+    </div>
+
+    <!-- Pantalla de registro -->
+    <div id="register-screen" class="screen hidden">
+      <!-- Logo -->
+      <div class="logo-container">
+        <img src="logo.png" alt="Logo de la Universidad" class="logo-img" />
+      </div>
+
+      <h2>Registro</h2>
+      <input type="text" id="register-username" placeholder="Usuario" />
+      <input type="password" id="register-password" placeholder="Contraseña" />
+      <select id="register-role">
+        <option value="profesor">Profesor</option>
+        <option value="estudiante">Estudiante</option>
+      </select>
+      <select id="register-faculty">
+        <option value="Ingeniería">Ingeniería</option>
+        <option value="Medicina">Medicina</option>
+        <option value="Derecho">Derecho</option>
+      </select>
+      <button onclick="register()">Registrarse</button>
+      <p>¿Ya tienes cuenta? <a href="#" onclick="showScreen('login-screen')">Inicia sesión</a></p>
+    </div>
+
+    <!-- Vista de profesor -->
+    <div id="profesor-screen" class="screen hidden">
+      <!-- Logo -->
+      <div class="logo-container">
+        <img src="logo.png" alt="Logo de la Universidad" class="logo-img" />
+      </div>
+
+      <h2>Panel del Profesor</h2>
+      <p id="profesor-info"></p>
+      <input type="text" id="poll-title" placeholder="Título de la encuesta" />
+      <input type="text" id="poll-options" placeholder="Opciones separadas por coma" />
+      <input type="date" id="poll-deadline" />
+      <button onclick="addPoll()">Añadir Encuesta</button>
+      <h3>Encuestas existentes con resultados</h3>
+      <ul id="prof-poll-list"></ul>
+      <button onclick="logout()">Cerrar sesión</button>
+    </div>
+
+    <!-- Vista de estudiante -->
+    <div id="estudiante-screen" class="screen hidden">
+      <!-- Logo -->
+      <div class="logo-container">
+        <img src="logo.png" alt="Logo de la Universidad" class="logo-img" />
+      </div>
+
+      <h2>Panel del Estudiante</h2>
+      <p id="estudiante-info"></p>
+      <h3>Encuestas Pendientes</h3>
+      <ul id="student-pending-list"></ul>
+      <h3>Encuestas Realizadas</h3>
+      <ul id="student-done-list"></ul>
+      <button onclick="logout()">Cerrar sesión</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
