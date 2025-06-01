@@ -1,6 +1,47 @@
-let users = JSON.parse(localStorage.getItem('users') || '[]');
+// =======================
+// VALIDACIONES
+// =======================
+
+// 1. Campo vacío
+function isEmpty(value) {
+  return !value.trim();
+}
+
+// 2. Longitud mínima
+function hasMinLength(value, length) {
+  return value.trim().length >= length;
+}
+
+// 3. Usuario válido (solo letras, números, guiones bajos)
+function isValidUsername(username) {
+  return /^[a-zA-Z0-9_]+$/.test(username);
+}
+
+// 4. Contraseña segura (mínimo 6 caracteres, 1 letra y 1 número)
+function isSecurePassword(password) {
+  return /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/.test(password);
+}
+
+// 5. Fecha futura
+function isFutureDate(dateString) {
+  const inputDate = new Date(dateString);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  return inputDate > today;
+}
+
+// 6. Mínimo 2 opciones válidas
+function hasMinimumOptions(options) {
+  return options.filter(opt => opt.trim() !== "").length >= 2;
+}
+
+// =======================
+// LÓGICA DE LA APP
+// =======================
+
+let users = JSON.parse(localStorage.getItem('users') || '[]'); 
 let polls = JSON.parse(localStorage.getItem('polls') || '[]');
-let votes = JSON.parse(localStorage.getItem('votes') || '{}'); // clave: username, valor: array de índices de encuestas votadas
+let votes = JSON.parse(localStorage.getItem('votes') || '{}');
 let currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
 
 function saveData() {
@@ -20,6 +61,21 @@ function register() {
   const password = document.getElementById('register-password').value;
   const role = document.getElementById('register-role').value;
   const faculty = document.getElementById('register-faculty').value;
+
+  if (isEmpty(username) || isEmpty(password)) {
+    alert("Usuario y contraseña son obligatorios");
+    return;
+  }
+
+  if (!isValidUsername(username)) {
+    alert("Nombre de usuario inválido. Solo letras, números y guiones bajos.");
+    return;
+  }
+
+  if (!isSecurePassword(password)) {
+    alert("Contraseña insegura. Mínimo 6 caracteres, al menos una letra y un número.");
+    return;
+  }
 
   if (users.some(u => u.username === username)) {
     alert("El usuario ya existe");
@@ -62,8 +118,18 @@ function addPoll() {
   const options = document.getElementById('poll-options').value.split(',').map(s => s.trim());
   const deadline = document.getElementById('poll-deadline').value;
 
-  if (!title || options.length < 2 || !deadline) {
+  if (isEmpty(title) || isEmpty(deadline)) {
     alert("Completa todos los campos");
+    return;
+  }
+
+  if (!hasMinimumOptions(options)) {
+    alert("Debes ingresar al menos 2 opciones válidas separadas por coma");
+    return;
+  }
+
+  if (!isFutureDate(deadline)) {
+    alert("La fecha límite debe ser en el futuro");
     return;
   }
 
@@ -95,8 +161,7 @@ function updatePollList() {
     .forEach(poll => {
       const li = document.createElement('li');
       li.innerHTML = `<strong>${poll.title}</strong> (hasta ${poll.deadline})<br/>
-        ${Object.entries(poll.results).map(([opt, count]) => `${opt}: ${count} votos`).join('<br/>')}
-      `;
+        ${Object.entries(poll.results).map(([opt, count]) => `${opt}: ${count} votos`).join('<br/>')}`;
       list.appendChild(li);
     });
 }
